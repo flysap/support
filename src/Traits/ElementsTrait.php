@@ -1,6 +1,6 @@
 <?php
 
-namespace Flysap\FormBuilder\Traits;
+namespace Flysap\Support\Traits;
 
 use Flysap\FormBuilder\Form;
 
