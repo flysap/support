@@ -2,7 +2,7 @@
 
 namespace Flysap\Support\Traits;
 
-use Flysap\FormBuilder\Form;
+use Flysap\Support\Group;
 
 trait ElementsTrait {
 
@@ -79,10 +79,13 @@ trait ElementsTrait {
     public function addElements(array $elements, $group = false) {
         array_walk($elements, function($element, $key) use($group) {
 
-            if( $group )
-                $this->addGroup(
-                    $element->hasAttribute('group') ? $element->getAttribute('group') : Form::DEFAULT_GROUP_NAME, [$key => $element]
-                );
+            if( $group ) {
+                if( in_array( 'addGroup', get_class_methods(get_class($this)) ) ) {
+                    $this->addGroup(
+                        $element->hasAttribute('group') ? $element->getAttribute('group') : Group::DEFAULT_GROUP_NAME, [$key => $element]
+                    );
+                }
+            }
 
             $this->elements[$key] = $element;
         });
