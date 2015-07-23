@@ -21,8 +21,9 @@ function is_folder_empty($path) {
 
     $fileExists = false;
 
-    foreach ($finder as $file)
+    foreach ($finder as $file) {
         $fileExists = true;
+    }
 
     return $fileExists;
 }
@@ -59,4 +60,38 @@ function remove_paths($paths = array()) {
         $filesystem
             ->remove($path);
     });
+}
+
+/**
+ * Make path .
+ *
+ * @param array $paths
+ */
+function mk_path($paths = array()) {
+    list($filesystem) = [new Filesystem()];
+
+    if(! is_array($paths))
+        $paths = (array)$paths;
+
+    array_walk($paths, function($path) use($filesystem) {
+        if(  $filesystem->exists($path) )
+            return false;
+
+        $filesystem
+            ->mkdir($path);
+    });
+}
+
+/**
+ * Dump contents to file .
+ *
+ * @param $path
+ * @param $content
+ * @return mixed
+ */
+function dump_file($path, $content) {
+    list($filesystem) = [new Filesystem()];
+
+    return $filesystem
+        ->dumpFile($path, $content);
 }
