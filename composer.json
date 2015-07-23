@@ -1,7 +1,11 @@
 {
   "name": "flysap/support",
   "description": "SMG",
-  "require": { },
+  "require": {
+    "symfony/filesystem": "~2.7",
+    "symfony/finder": "~2.7",
+    "symfony/yaml": "~2.7"
+  },
   "license": "MIT",
   "authors": [
     {
@@ -12,7 +16,8 @@
   "autoload": {
     "psr-4": {
       "Flysap\\Support\\": "src/"
-    }
+    },
+    "files": ["helpers.php"]
   },
   "minimum-stability": "dev"
 }
