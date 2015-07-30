@@ -6,6 +6,9 @@
     "symfony/finder": "~2.7",
     "symfony/yaml": "~2.7"
   },
+  "suggest": {
+    "flysap/support": "In order to use archive functions you must compile PHP with zip support by using the --enable-zip configure option."
+  },
   "license": "MIT",
   "authors": [
     {

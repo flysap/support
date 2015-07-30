@@ -4,6 +4,7 @@ namespace Flysap\Support;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use ZipArchive;
 
 /**
  * Check if specific path is empty
@@ -94,4 +95,59 @@ function dump_file($path, $content) {
 
     return $filesystem
         ->dumpFile($path, $content);
+}
+
+/**
+ * Create archive
+ *
+ * @param $archivePath
+ * @param null $storePath
+ * @return bool
+ * @internal param $path
+ */
+function create_archive($archivePath, $storePath  = null) {
+    list($finder) = [new Finder];
+
+    $path = str_replace('\\', '/', realpath($archivePath));
+
+    if(! is_path_exists( $path ))
+        return false;
+
+    if(! $storePath)
+        $storePath = storage_path();
+
+    $file     = pathinfo($path);
+    $fullPath = $storePath . DIRECTORY_SEPARATOR . $file['basename'] . '.zip';
+
+    $zip = new ZipArchive();
+    $zip->open($fullPath, ZipArchive::CREATE);
+
+    $files = $finder->in($path)->files();
+
+    foreach ($files as $file)
+        $zip->addFile(
+            $file->getRealpath(),
+            $file->getRelativePathname()
+        );
+
+    $zip->close();
+
+    return $fullPath;
+}
+
+/**
+ * Download archive .
+ *
+ * @param $path
+ * @param $file
+ * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+ */
+function download_archive($path, $file) {
+    $fullPath = create_archive($path);
+
+    return response()
+        ->download($fullPath, $file . '.zip', [
+            'Content-Type: application/zip',
+            'Content-Disposition: attachment; filename='.$file,
+        ]);
 }
