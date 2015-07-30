@@ -127,4 +127,19 @@ trait ElementAttributes {
         $this->attributes = array();
         return $this;
     }
+
+    /**
+     * Render attributes .
+     *
+     * @return string
+     */
+    protected function renderAttributes() {
+        $result = '';
+
+        foreach ($this->getAttributes() as $attribute => $value) {
+            $result .= " {$attribute}=\"{$value}\"";
+        }
+
+        return $result;
+    }
 }
