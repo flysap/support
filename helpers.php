@@ -7,6 +7,29 @@ use Symfony\Component\Finder\Finder;
 use ZipArchive;
 
 /**
+ * Check if file has extension .
+ *
+ * @param $file
+ * @param $extension
+ * @return bool
+ */
+function has_extension($file, $extension) {
+    return $extension == get_file_extension($file);
+}
+
+/**
+ * Get file extension .
+ *
+ * @param $file
+ * @return mixed
+ */
+function get_file_extension($file) {
+    $file = pathinfo($file);
+
+    return $file['extension'];
+}
+
+/**
  * Check if specific path is empty
  *
  * @param $path
@@ -22,9 +45,8 @@ function is_folder_empty($path) {
 
     $fileExists = false;
 
-    foreach ($finder as $file) {
+    foreach ($finder as $file)
         $fileExists = true;
-    }
 
     return $fileExists;
 }
