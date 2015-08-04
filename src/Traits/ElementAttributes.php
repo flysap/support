@@ -131,12 +131,18 @@ trait ElementAttributes {
     /**
      * Render attributes .
      *
+     * @param array $except
      * @return string
      */
-    protected function renderAttributes() {
+    protected function renderAttributes($except = array()) {
         $result = '';
 
-        foreach ($this->getAttributes() as $attribute => $value) {
+        $attributes = array_except($this->getAttributes(), $except);
+
+        foreach ($attributes as $attribute => $value) {
+            if( $value instanceof \Closure )
+                $value = $value();
+
             $result .= " {$attribute}=\"{$value}\"";
         }
 
