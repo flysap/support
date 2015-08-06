@@ -230,3 +230,25 @@ function export_to_csv($array, $path, $delimiter = ',') {
 
     return download_file($path, $file['filename'], 'csv');
 }
+
+/**
+ * Append to query .
+ *
+ * @param array $appends
+ * @param null $fragment
+ * @param null $_get
+ * @return string
+ */
+function append_query_url(array $appends, $fragment = null, $_get = null) {
+    $array = [];
+    array_walk($appends, function($value, $key) use(& $array) {
+        $key = str_replace('.', '_', $key);
+        $array[$key] = $value;
+    });
+
+    $array = (
+        array_merge(! is_null($_get) ? $_get : $_GET, $array)
+    );
+
+    return http_build_query($array, null, '&') . $fragment;
+}

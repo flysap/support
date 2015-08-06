@@ -134,10 +134,10 @@ trait ElementAttributes {
      * @param array $except
      * @return string
      */
-    protected function renderAttributes($except = array()) {
+    protected function renderAttributes($only = array()) {
         $result = '';
 
-        $attributes = array_except($this->getAttributes(), $except);
+        $attributes = array_only($this->getAttributes(), $only);
 
         foreach ($attributes as $attribute => $value) {
             if( $value instanceof \Closure )
