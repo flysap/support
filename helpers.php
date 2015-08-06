@@ -165,11 +165,68 @@ function create_archive($archivePath, $storePath  = null) {
  * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
  */
 function download_archive($path, $file) {
-    $fullPath = create_archive($path);
+    $fullPath = create_archive($path, $file);
 
+    return download_file($fullPath, $file, 'zip');
+
+}
+
+/**
+ * Download archive .
+ *
+ * @param $path
+ * @param $file
+ * @param $format
+ * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+ */
+function download_file($path, $file, $format) {
     return response()
-        ->download($fullPath, $file . '.zip', [
-            'Content-Type: application/zip',
+        ->download($path, $file . '.' . $format, [
+            'Content-Type: application/' . $format,
             'Content-Disposition: attachment; filename='.$file,
         ]);
+}
+
+/**
+ * Export to csv data .
+ *
+ * @param $array
+ * @param $path
+ * @param string $delimiter
+ * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+ */
+function export_to_csv($array, $path, $delimiter = ',') {
+    $list = $headers = [];
+
+    array_walk($array, function($value, $key) use($delimiter, & $list, & $headers) {
+        if( ! is_numeric($key) && $key == 'headers' ) {
+            $headers = implode(',', $value);
+            return;
+        }
+
+        $line = '';
+        $count = 0;
+        foreach ($value as $k => $v) {
+            $count++;
+            if(! is_numeric($k) )
+                $headers[] = $k;
+
+            if($count >= count($value))
+                $delimiter = '';
+
+            $line .= $v . $delimiter;
+        }
+
+        if( is_array($headers))
+            $headers = implode(',', $headers);
+
+        $list[] = $line;
+    });
+
+    array_unshift($list, $headers);
+    dump_file($path, implode('\\n', $list));
+
+    $file = pathinfo($path);
+
+    return download_file($path, $file['filename'], 'csv');
 }
