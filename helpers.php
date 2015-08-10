@@ -247,7 +247,7 @@ function append_query_url(array $appends, $fragment = null, $_get = null) {
     });
 
     $array = (
-        array_merge(! is_null($_get) ? $_get : $_GET, $array)
+        array_merge(! is_null($_get) ? $_get : [], $array)
     );
 
     return http_build_query($array, null, '&') . $fragment;
