@@ -188,14 +188,13 @@ function download_file($path, $file, $format) {
 }
 
 /**
- * Export to csv data .
+ * Convert array to csv .
  *
  * @param $array
- * @param $path
  * @param string $delimiter
- * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+ * @return string
  */
-function export_to_csv($array, $path, $delimiter = ',') {
+function convert_to_csv($array, $delimiter = ',') {
     $list = $headers = [];
 
     array_walk($array, function($value, $key) use($delimiter, & $list, & $headers) {
@@ -208,11 +207,16 @@ function export_to_csv($array, $path, $delimiter = ',') {
         $count = 0;
         foreach ($value as $k => $v) {
             $count++;
-            if(! is_numeric($k) )
-                $headers[] = $k;
+            if(! is_numeric($k) ) {
+                if(! $headers)
+                    $headers[] = $k;
+            }
 
             if($count >= count($value))
                 $delimiter = '';
+
+           if( is_array($v) )
+               $v = implode(':', $v);
 
             $line .= $v . $delimiter;
         }
@@ -224,7 +228,22 @@ function export_to_csv($array, $path, $delimiter = ',') {
     });
 
     array_unshift($list, $headers);
-    dump_file($path, implode('\\n', $list));
+
+    return implode('\\n', $list);
+}
+
+/**
+ * Export to csv data .
+ *
+ * @param $array
+ * @param $path
+ * @param string $delimiter
+ * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+ */
+function export_to_csv($array, $path, $delimiter = ',') {
+    $list = convert_to_csv($array, $delimiter);
+
+    dump_file($path, $list);
 
     $file = pathinfo($path);
 
