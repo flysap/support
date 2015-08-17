@@ -271,3 +271,15 @@ function append_query_url(array $appends, $fragment = null, $_get = null) {
 
     return http_build_query($array, null, '&') . $fragment;
 }
+
+
+/**
+ * Get configuration section .
+ *
+ * @param null $section
+ * @param array $configuration
+ * @return mixed
+ */
+function get_conf_section($section = null, $configuration = array()) {
+    return array_get($configuration, $section);
+}
