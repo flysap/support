@@ -2,6 +2,7 @@
 
 namespace Flysap\Support;
 
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use ZipArchive;
@@ -282,4 +283,21 @@ function append_query_url(array $appends, $fragment = null, $_get = null) {
  */
 function get_conf_section($section = null, $configuration = array()) {
     return array_get($configuration, $section);
+}
+
+/**
+ * Call Artisan command .
+ *
+ * @param $command
+ * @param array $params
+ * @param callable $onFinish
+ * @return mixed
+ */
+function artisan($command, $params = array(), \Closure $onFinish = null) {
+    $exitCode = Artisan::call($command, $params);
+
+    if(! is_null($onFinish) )
+        return $onFinish($exitCode);
+
+    return $exitCode;
 }
