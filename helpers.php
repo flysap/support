@@ -5,6 +5,7 @@ namespace Flysap\Support;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 use ZipArchive;
 
 /**
@@ -300,4 +301,35 @@ function artisan($command, $params = array(), \Closure $onFinish = null) {
         return $onFinish($exitCode);
 
     return $exitCode;
+}
+
+
+/**
+ * Merge config from yaml .
+ *
+ * @param $path
+ * @param $key
+ */
+function merge_yaml_config_from($path, $key) {
+    $array = Yaml::parse(file_get_contents(
+        $path
+    ));
+
+    app('config')
+        ->set($key, array_merge(config($key), $array));
+}
+
+/**
+ * Set comfig from yaml .
+ *
+ * @param $path
+ * @param $key
+ */
+function set_config_from_yaml($path, $key) {
+    $array = Yaml::parse(file_get_contents(
+        $path
+    ));
+
+    app('config')
+        ->set($key, array_merge($array, config($key, [])));
 }
