@@ -9,14 +9,19 @@ abstract class DriverManager {
      *
      * @var array
      */
-    protected $drivers = [];
+    protected $instances = [];
+
+    /**
+     * @var
+     */
+    protected $drivers;
 
     /**
      * Get the default driver name.
      *
      * @return string
      */
-    abstract public function getDefaultDriver();
+    abstract protected function getDefaultDriver();
 
     /**
      * Get a driver instance.
@@ -30,11 +35,11 @@ abstract class DriverManager {
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (! isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->createDriver($driver);
+        if (! isset($this->instances[$driver])) {
+            $this->instances[$driver] = $this->createDriver($driver);
         }
 
-        return $this->drivers[$driver];
+        return $this->instances[$driver];
     }
 
     /**
@@ -51,24 +56,36 @@ abstract class DriverManager {
         if (! isset($drivers[$driver]))
             throw new DriverException("Driver [$driver] not supported.");
 
-        $class = $drivers[$driver];
+        $class = $drivers[$driver]['class'];
 
         if (! class_exists($class))
             throw new DriverException("Driver [$driver] not found.");
 
-        return (new $class);
+        return (new $class(
+            array_except($drivers[$driver], 'class')
+        ));
     }
 
     /**
-     * Get all of the created "drivers".
+     * Set drivers .
      *
-     * @return array
+     * @param array $drivers
+     * @return $this
+     */
+    public function setDrivers(array $drivers) {
+        $this->drivers = $drivers;
+
+        return $this;
+    }
+
+    /**
+     * Get drivers .
+     *
+     * @return mixed
      */
     public function getDrivers() {
         return $this->drivers;
     }
-
-    abstract function setDrivers(array $drivers);
 
     /**
      * Dynamically call the default driver instance.
