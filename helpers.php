@@ -159,6 +159,8 @@ function create_archive($archivePath, $storePath  = null) {
     return $fullPath;
 }
 
+
+
 /**
  * Download archive .
  *
@@ -188,6 +190,8 @@ function download_file($path, $file, $format) {
             'Content-Disposition: attachment; filename='.$file,
         ]);
 }
+
+
 
 /**
  * Convert array to csv .
@@ -251,6 +255,8 @@ function export_to_csv($array, $path, $delimiter = ',') {
 
     return download_file($path, $file['filename'], 'csv');
 }
+
+
 
 /**
  * Append to query .
