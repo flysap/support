@@ -122,6 +122,28 @@ function dump_file($path, $content) {
 }
 
 /**
+ * Get file contents and convert if needed to array .
+ *
+ * @param $file
+ * @param null $extension
+ * @return array
+ */
+function get_file_contents($file, $extension = null) {
+    if( ! file_exists($file)  )
+        return [];
+
+    if(! $extension) {
+        $fileInfo  = pathinfo($file);
+        $extension = $fileInfo['extension'];
+    }
+
+    $content = file_get_contents($file);
+
+    if( $extension == 'yaml' )
+        return Yaml::parse($content);
+}
+
+/**
  * Create archive
  *
  * @param $archivePath
