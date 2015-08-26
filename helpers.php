@@ -339,6 +339,9 @@ function artisan($command, $params = array(), \Closure $onFinish = null) {
  * @param $key
  */
 function merge_yaml_config_from($path, $key) {
+    if(! file_exists($path))
+        return;
+
     $array = Yaml::parse(file_get_contents(
         $path
     ));
