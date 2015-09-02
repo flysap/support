@@ -207,7 +207,7 @@ function download_archive($path, $file) {
  */
 function download_file($path, $file, $format) {
     return response()
-        ->download($path, $file . '.' . $format, [
+        ->download($path, $file, [
             'Content-Type: application/' . $format,
             'Content-Disposition: attachment; filename='.$file,
         ]);
