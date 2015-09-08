@@ -40,6 +40,16 @@ trait AttributesTrait {
     }
 
     /**
+     * Check if has key .
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function has($key) {
+        return $this->get($key);
+    }
+
+    /**
      * Set attributes .
      *
      * @param array $attributes
