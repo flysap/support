@@ -141,6 +141,8 @@ function get_file_contents($file, $extension = null) {
 
     if( $extension == 'yaml' )
         return Yaml::parse($content);
+    elseif( $extension == 'json' )
+        return json_decode($content, true);
 }
 
 /**
