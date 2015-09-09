@@ -366,3 +366,19 @@ function set_config_from_yaml($path, $key) {
     app('config')
         ->set($key, array_merge($array, config($key, [])));
 }
+
+
+/**
+ * Change array keys recursive .
+ *
+ * @param $arr
+ * @return array
+ */
+function array_change_key_case_recursive($arr) {
+    return array_map(function ($item) {
+        if (is_array($item))
+            $item = array_change_key_case_recursive($item);
+        return $item;
+    }, array_change_key_case($arr));
+}
+
