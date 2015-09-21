@@ -131,7 +131,7 @@ trait ElementAttributes {
     /**
      * Render attributes .
      *
-     * @param array $except
+     * @param array $only
      * @return string
      */
     protected function renderAttributes($only = array()) {
