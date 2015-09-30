@@ -2,17 +2,19 @@
 
 namespace Flysap\Support\Traits;
 
+use Illuminate\Support\Facades\Auth;
+
 trait ElementPermissions {
 
     /**
      * @var
      */
-    protected $roles;
+    protected $roles = [];
 
     /**
      * @var
      */
-    protected $permissions;
+    protected $permissions = [];
 
     /**
      * Check if current element has roles .
@@ -63,28 +65,60 @@ trait ElementPermissions {
     }
 
     /**
-     * Check if current user is allowed to access current eleement .
+     * Check if current user is allowed to access current element .
      *
+     * @param array $roles
+     * @param array $permissions
      * @return bool
      */
-    public function isAllowed() {
+    public function isAllowed(array $roles = [], array $permissions = []) {
+        $roles        = $roles ?: $this->roles;
+        $permissions  = $permissions ?: $this->permissions;
 
         /** Check for roles . */
-        if( $this->hasRoles() ) {
-            if( \Flysap\Users\is( $this->roles ) )
+        if( $roles ) {
+            if( $this->is( $roles ) )
                 return true;
 
             return false;
         }
 
         /** Check for permissions . */
-        if( $this->hasPermissions() ) {
-            if( \Flysap\Users\can( $this->permissions ) )
+        if( $permissions ) {
+            if( $this->can( $permissions ) )
                 return true;
 
             return false;
         }
 
         return true;
+    }
+
+
+    /**
+     * Have permission to .
+     *
+     * @param $permission
+     * @return bool
+     * @internal param $role
+     */
+    protected function can($permission) {
+        if(Auth::check() && Auth::user()->can($permission))
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Check if current is role .
+     *
+     * @param $role
+     * @return bool
+     */
+    protected function is($role) {
+        if(Auth::check() && Auth::user()->is($role))
+            return true;
+
+        return false;
     }
 }
