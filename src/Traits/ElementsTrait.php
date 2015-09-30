@@ -70,6 +70,21 @@ trait ElementsTrait {
     }
 
     /**
+     * Add new element .
+     *
+     * @param $element
+     * @param bool $group
+     * @return $this
+     */
+    public function addElement($key, $element, $group = false) {
+        $this->addElements([
+            $key => $element
+        ], $group);
+
+        return $this;
+    }
+
+    /**
      * Add multiple elements at once
      *
      * @param  array $elements
