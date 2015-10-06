@@ -333,6 +333,25 @@ function artisan($command, $params = array(), \Closure $onFinish = null) {
     return $exitCode;
 }
 
+/**
+ * Set config from yaml .
+ *
+ * @param $path
+ * @param $key
+ * @param null $mergePath
+ */
+function set_config_from_yaml($path, $key, $mergePath = null) {
+    $array = Yaml::parse(file_get_contents(
+        $path
+    ));
+
+    app('config')
+        ->set($key, array_merge($array, config($key, [])));
+
+    if(! is_null($mergePath))
+        merge_yaml_config_from($mergePath, $key);
+}
+
 
 /**
  * Merge config from yaml .
@@ -352,20 +371,6 @@ function merge_yaml_config_from($path, $key) {
         ->set($key, array_merge(config($key), $array));
 }
 
-/**
- * Set comfig from yaml .
- *
- * @param $path
- * @param $key
- */
-function set_config_from_yaml($path, $key) {
-    $array = Yaml::parse(file_get_contents(
-        $path
-    ));
-
-    app('config')
-        ->set($key, array_merge($array, config($key, [])));
-}
 
 
 /**
