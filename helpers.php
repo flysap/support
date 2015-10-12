@@ -167,6 +167,9 @@ function create_archive($archivePath, $storePath  = null) {
     $file     = pathinfo($path);
     $fullPath = $storePath . DIRECTORY_SEPARATOR . $file['basename'] . '.zip';
 
+    if( file_exists($fullPath) )
+        remove_paths($fullPath);
+
     $zip = new ZipArchive();
     $zip->open($fullPath, ZipArchive::CREATE);
 
