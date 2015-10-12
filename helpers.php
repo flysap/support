@@ -193,7 +193,7 @@ function create_archive($archivePath, $storePath  = null) {
  * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
  */
 function download_archive($path, $file) {
-    $fullPath = create_archive($path, $file);
+    $fullPath = create_archive($path);
 
     return download_file($fullPath, $file, 'zip');
 
