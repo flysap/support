@@ -390,3 +390,29 @@ function array_change_key_case_recursive($arr) {
     }, array_change_key_case($arr));
 }
 
+/**
+ * Is allowed current user to ..
+ *
+ * @param array $roles
+ * @param array $permissions
+ * @return bool
+ */
+function isAllowed(array $roles = [], array $permissions = []) {
+    /** Check for roles . */
+    if( $roles ) {
+        if( \Auth::check() && \Auth::user()->is($roles) )
+            return true;
+
+        return false;
+    }
+
+    /** Check for permissions . */
+    if( $permissions ) {
+        if( \Auth::check() && \Auth::user()->can($permissions) )
+            return true;
+
+        return false;
+    }
+
+    return true;
+}
