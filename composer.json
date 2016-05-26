@@ -2,9 +2,9 @@
   "name": "flysap/support",
   "description": "SMG",
   "require": {
-    "symfony/filesystem": "~2.7",
-    "symfony/finder": "~2.7",
-    "symfony/yaml": "~2.7"
+    "symfony/filesystem": "~2.8",
+    "symfony/finder": "~2.8",
+    "symfony/yaml": "~2.8"
   },
   "suggest": {
     "flysap/support": "In order to use archive functions you must compile PHP with zip support by using the --enable-zip configure option."
